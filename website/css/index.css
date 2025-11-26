@@ -1,0 +1,374 @@
+/* ===================================
+   Reset & Base Styles
+   =================================== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-border: #000000;
+    --font-main: 'Courier New', 'Courier', monospace;
+    --transition-speed: 0.3s;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: var(--font-main);
+    background: var(--color-bg);
+    color: var(--color-text);
+    position: relative;
+}
+
+/* ===================================
+   Canvas Layers
+   =================================== */
+#cube-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* Base layer */
+}
+
+#particles-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2; /* Above cube so white particles are visible */
+  pointer-events: none; /* particles layer doesn't block clicks */
+}
+
+/* Menu and UI elements above particles */
+.menu-toggle {
+    position: fixed;
+    top: 40px;
+    left: 40px;
+    width: 26px;
+    height: 26px;
+    border: none;
+    z-index: 100; /* High above particles */
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 300px;
+    height: 100vh;
+    background: var(--color-bg);
+    border-left: 2px solid var(--color-border);
+    transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    overflow-y: auto;
+    z-index: 200; /* Very high above everything */
+}
+
+/* Mobile menu - full screen and large text */
+@media (max-width: 600px) {
+    .side-menu {
+        width: 100vw; /* Full screen width */
+        right: -100vw; /* Hide off-screen */
+        border-left: none;
+        padding: 0;
+    }
+    
+    .menu-content {
+        padding: 80px 40px 40px; /* More padding, space from top */
+        text-align: center; /* Center everything */
+    }
+    
+    .menu-category {
+        font-size: 1.8rem !important; /* Reduced from 3.9rem */
+        margin-bottom: 1.5rem !important;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    
+    .menu-list {
+        margin-bottom: 2.5rem !important;
+    }
+    
+    .menu-list a {
+        font-size: 1.4rem !important; /* Reduced from 2.6rem */
+        padding: 1rem 0 !important;
+        min-height: 50px !important;
+        display: block !important;
+        text-align: center;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .menu-list a:hover,
+    .menu-list a:focus {
+        background: rgba(0, 0, 0, 0.05);
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+}
+
+
+/* ===================================
+   Menu Toggle Button (styles only - positioning above)
+   =================================== */
+
+.menu-line {
+    width: 22px;
+    height: 2px;
+    background: var(--color-text);
+    transition: all 0.4s ease;
+    display: block;
+    opacity: 1;
+}
+
+.menu-toggle:hover .menu-line,
+.menu-toggle:focus .menu-line {
+    opacity: 0.6;
+}
+.menu-toggle:focus {
+  outline: none;
+}
+.menu-toggle.active .menu-line {
+    transform: rotate(90deg);
+}
+
+.menu-list {
+  list-style-type: disc;  /* restore bullet points */
+  padding-left: 1.5rem;   /* indent nicely */
+}
+.menu-list li {
+  margin-bottom: 0.5rem;
+}
+
+/* ===================================
+   Side Menu
+   =================================== */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    background: var(--color-bg);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+    overflow-y: auto;
+}
+
+.side-menu:not([hidden]) {
+    transform: translateX(0);
+}
+
+.menu-content {
+    padding: 120px 40px 40px;
+}
+
+.menu-category {
+    font-size: 1.15rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-decoration: underline;
+    margin-bottom: 20px;
+}
+
+.menu-list {
+    list-style-type: disc;  /* restore bullet points */
+    padding-left: 1.5rem;   /* indent nicely */
+}
+
+.menu-list li {
+    margin-bottom: 15px;
+}
+
+.menu-list a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.7rem;
+    transition: opacity var(--transition-speed) ease;
+    display: inline-block;
+}
+
+.menu-list a:hover,
+.menu-list a:focus {
+    opacity: 0.6;
+    text-decoration: underline;
+}
+
+/* ===================================
+   Responsive Design
+   =================================== */
+.site-footer {
+  background: transparent;
+  text-align: center;
+  padding: 1rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
+}
+.site-footer a {
+  color: #000;
+  text-decoration: underline;
+}
+.site-footer a:hover {
+  opacity: 0.8;
+}
+
+/* ===================================
+   Responsive Design
+   =================================== */
+@media (max-width: 900px) {
+    .menu-toggle {
+        top: 30px;
+        left: 30px;
+        width: 28px;
+        height: 28px;
+    }
+    
+    .menu-line {
+        width: 24px;
+        height: 2px;
+    }
+    
+    .menu-content {
+        padding: 100px 30px 30px;
+    }
+    
+    .menu-category {
+        font-size: 1.8rem; /* Much bigger for mobile */
+        margin-bottom: var(--spacing-md);
+        font-weight: bold;
+    }
+    
+    .menu-list a {
+        font-size: 1.2rem; /* Much bigger for mobile */
+        padding: var(--spacing-sm) 0;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .menu-toggle {
+        top: 20px;
+        left: 20px;
+        width: 30px;
+        height: 30px;
+    }
+    
+    .menu-line {
+        width: 26px;
+        height: 3px;
+    }
+
+    .side-menu {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .menu-content {
+        padding: 80px 20px 20px;
+    }
+    
+    .menu-category {
+        font-size: 2.2rem; /* Very large for small screens */
+        margin-bottom: var(--spacing-lg);
+        font-weight: bold;
+    }
+    
+    .menu-list {
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .menu-list li {
+        margin-bottom: 10px;
+    }
+    
+    .menu-list a {
+        font-size: 1.5rem; /* Large and readable */
+        padding: var(--spacing-md) 0;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-toggle {
+        top: 15px;
+        left: 15px;
+        width: 32px;
+        height: 32px;
+    }
+    
+    .menu-line {
+        width: 28px;
+        height: 3px;
+    }
+    
+    .menu-content {
+        padding: 60px 15px 15px;
+    }
+    
+    .menu-category {
+        font-size: 2.5rem; /* Fill the screen nicely */
+        margin-bottom: var(--spacing-lg);
+        font-weight: bold;
+    }
+    
+    .menu-list a {
+        font-size: 1.8rem; /* Very large for readability */
+        padding: var(--spacing-lg) 0;
+        min-height: 55px;
+    }
+}
+
+/* ===================================
+   Touch-friendly interactions
+   =================================== */
+@media (hover: none) and (pointer: coarse) {
+    .menu-toggle {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .menu-line {
+        width: 22px;
+        height: 2px;
+    }
+    
+    .menu-list a {
+        padding: 12px 0;
+        font-size: 0.7rem;
+    }
+}
+
+/* ===================================
+   Accessibility
+   =================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

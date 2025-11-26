@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Find the right software solution for your needs">
+    <title>mos-erver</title>
+    
+    <!-- Cache Control for Mobile Safari -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="stylesheet" href="css/main.css?v=20241012007">
+    <link rel="stylesheet" href="css/index.css?v=20241012007">
+    <link rel="stylesheet" href="css/particles.css?v=20241012007">
+    <link rel="stylesheet" href="css/decision-tree.css?v=20241012007">
+</head>
+<body>
+    <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+    <main class="container">
+        <nav class="breadcrumb">
+            <a href="discovery.html">← back to categories</a>
+        </nav>
+
+        <header>
+            <h1>
+                I need 
+                <button class="need-type" id="category-title" aria-label="Click to learn more">
+                    <span id="category-name">...</span>
+                    <span class="info-icon">ⓘ</span>
+                </button>
+            </h1>
+        </header>
+
+        <section id="decision-tree" aria-label="Decision tree for finding the right solution">
+            <!-- Questions will be dynamically generated -->
+        </section>
+
+        <section id="solutions" class="solutions" hidden aria-label="Recommended solutions">
+            <div class="solutions-particles" aria-hidden="true">
+                <span class="particle-dot"></span>
+                <span class="particle-dot"></span>
+                <span class="particle-dot"></span>
+                <span class="particle-dot"></span>
+                <span class="particle-dot"></span>
+            </div>
+            <h2>some solutions</h2>
+            <div id="solutions-list"></div>
+            <button class="reset" onclick="resetDecisionTree()" aria-label="Reset and start over">
+                ← start over
+            </button>
+        </section>
+
+        <aside id="category-info-modal" class="info-modal" hidden>
+            <div class="info-content">
+                <button class="close-modal" aria-label="Close information">×</button>
+                <div id="category-info-content">
+                    <!-- Dynamic content loaded here -->
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script src="js/particles.js?v=20241012007"></script>
+    <script src="js/categories.js?v=20241012007"></script>
+    <script src="js/decision-tree.js?v=20241012007"></script>
+</body>
+</html>
