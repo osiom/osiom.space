@@ -106,10 +106,89 @@
             border: none;
         }
 
+        .randomize-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .randomize-btn:hover {
+            opacity: 1;
+            transform: rotate(180deg);
+        }
+
+        .randomize-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .pixel-slider-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 5px;
+        }
+
+        .pixel-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .pixel-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #333;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .pixel-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .pixel-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #333;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .slider-label {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: #333;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="pixel-slider-container">
+            <span class="slider-label">px</span>
+            <input type="range" class="pixel-slider" id="pixelSlider" min="1" max="20" value="1">
+        </div>
         <div class="glitch-box" id="glitchBox">
             <canvas id="canvas"></canvas>
         </div>
@@ -118,6 +197,13 @@
             <input type="color" class="color-input" id="color2" value="#4B0082">
             <input type="color" class="color-input" id="color3" value="#FFD700">
             <input type="color" class="color-input" id="color4" value="#6A5ACD">
+            <button class="randomize-btn" id="randomizeBtn" aria-label="Randomize colors">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 4v6h-6"></path>
+                    <path d="M1 20v-6h6"></path>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -227,6 +313,40 @@
         // Setup color picker events
         ['color1', 'color2', 'color3', 'color4'].forEach(id => {
             document.getElementById(id).addEventListener('input', saveColors);
+        });
+
+        // Randomize colors function
+        function randomizeColors() {
+            const randomHex = () => '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+            document.getElementById('color1').value = randomHex();
+            document.getElementById('color2').value = randomHex();
+            document.getElementById('color3').value = randomHex();
+            document.getElementById('color4').value = randomHex();
+            saveColors();
+            // Trigger a glitch burst for visual feedback
+            glitchIntensity = 3;
+            setTimeout(() => {
+                glitchIntensity = isHovering ? 1.5 : 0.5;
+            }, 300);
+        }
+
+        // Setup randomize button
+        document.getElementById('randomizeBtn').addEventListener('click', randomizeColors);
+
+        // Pixel size for pixelation effect
+        let pixelSize = 1;
+        const pixelSlider = document.getElementById('pixelSlider');
+        
+        // Load pixel size from localStorage
+        const savedPixelSize = localStorage.getItem('osiom-pixel-size');
+        if (savedPixelSize) {
+            pixelSize = parseInt(savedPixelSize);
+            pixelSlider.value = pixelSize;
+        }
+        
+        pixelSlider.addEventListener('input', (e) => {
+            pixelSize = parseInt(e.target.value);
+            localStorage.setItem('osiom-pixel-size', pixelSize);
         });
 
         loadColors();
@@ -339,6 +459,78 @@
             }
             
             ctx.putImageData(imageData, 0, 0);
+            
+            // Apply pixelation effect if pixel size > 1
+            if (pixelSize > 1) {
+                // Get current canvas data
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = width;
+                tempCanvas.height = height;
+                
+                // Scale down
+                const smallWidth = Math.ceil(width / pixelSize);
+                const smallHeight = Math.ceil(height / pixelSize);
+                
+                tempCtx.drawImage(canvas, 0, 0, smallWidth, smallHeight);
+                
+                // Scale back up with pixelation
+                ctx.imageSmoothingEnabled = false;
+                ctx.mozImageSmoothingEnabled = false;
+                ctx.webkitImageSmoothingEnabled = false;
+                ctx.msImageSmoothingEnabled = false;
+                
+                ctx.drawImage(tempCanvas, 0, 0, smallWidth, smallHeight, 0, 0, width, height);
+            }
+            
+            // Draw figlet text
+            drawFiglet();
+        }
+        
+        // Figlet ASCII art for "osiom"
+        const figletText = [
+            "           _                 ",
+            "  ___  ___(_) ___  _ __ ___  ",
+            " / _ \\/ __| |/ _ \\| '_ ` _ \\ ",
+            "| (_) \\__ \\ | (_) | | | | | |",
+            " \\___/|___/_|\\___/|_| |_| |_|"
+        ];
+        
+        function drawFiglet() {
+            const fontSize = 14;
+            const lineHeight = fontSize * 1.1;
+            const totalHeight = figletText.length * lineHeight;
+            const startY = (height - totalHeight) / 2;
+            
+            ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // Glitchy text effect - slight position jitter based on time
+            const jitterX = Math.sin(time * 0.1) * 2;
+            const jitterY = Math.cos(time * 0.13) * 1;
+            
+            // Draw text with shadow/glow for visibility
+            figletText.forEach((line, i) => {
+                const y = startY + i * lineHeight + jitterY;
+                const x = width / 2 + jitterX;
+                
+                // Dark shadow for contrast
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                ctx.fillText(line, x + 2, y + 2);
+                
+                // Main text - white with slight transparency
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.fillText(line, x, y);
+                
+                // Occasional glitch offset for some characters
+                if (glitchIntensity > 1 && Math.random() > 0.7) {
+                    ctx.fillStyle = 'rgba(255, 0, 100, 0.5)';
+                    ctx.fillText(line, x + 3, y);
+                    ctx.fillStyle = 'rgba(0, 255, 255, 0.5)';
+                    ctx.fillText(line, x - 3, y);
+                }
+            });
         }
 
         function animate() {
