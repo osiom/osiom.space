@@ -1,0 +1,16 @@
+# Deployment Utils for mos-erver
+
+## Copy website files to server
+scp -r /Users/matteoosio/Documents/mos-erver/website/* mos@192.168.0.100:/home/mos/mos-erver/
+
+## Restart service (only if needed - static files usually don't require restart)
+ssh mos@192.168.0.100 "sudo systemctl restart mos-erver.service"
+
+## Check service status
+ssh mos@192.168.0.100 "sudo systemctl status mos-erver.service"
+
+## View service logs
+ssh mos@192.168.0.100 "sudo journalctl -u mos-erver.service -f"
+
+## One-liner: Deploy and restart
+scp -r /Users/matteoosio/Documents/mos-erver/website/* mos@192.168.0.100:/home/mos/mos-erver/ && ssh mos@192.168.0.100 "sudo systemctl restart mos-erver.service"
