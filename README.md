@@ -1,110 +1,77 @@
-# MOS-ERVER
+# osiom.space
 
-> **Personal Server Infrastructure & Services**  
-> A comprehensive server setup hosting multiple services and applications
+> Interactive glitch art experience with customizable colors and pixel effects
 
-## 🏗️ **Server Architecture**
+## ✨ Features
+- Fluid glitch animation with smooth color transitions
+- 4-color customizable palette (color pickers)
+- Adjustable pixelation (slider)
+- Color randomization button
+- Responsive design for desktop, tablet, and mobile
+- Dynamic dropdown menus for Events and Web
+- Social links (Mastodon, GitHub, Codeberg, Substack)
+- No dependencies, pure HTML/CSS/JS
 
-**Host**: `user@your-server.local`  
-**Service**: `mos-erver.service` (systemd)  
-**Base Directory**: `/home/user/mos-erver/`
+## 🚀 Quick Start
+Open `index.html` in your browser. No build or install required.
 
-## 📦 **Available Services**
-
-### 🌐 [Website](./website/)
-Interactive decision-tree website for sustainable technology recommendations
-- **Tech Stack**: HTML5, CSS3, JavaScript, Three.js
-- **Features**: Responsive design, particle system, decision trees
-- **URL**: Main website interface
-
-### 🛡️ [Pi-hole + WireGuard](./pihole-wireguard/)
-Network-wide ad blocking with secure VPN access
-- **Pi-hole**: DNS sinkhole for ad/tracker blocking
-- **WireGuard**: Modern VPN for secure remote access
-- **Integration**: Seamless ad-blocking through VPN
-
-### 🤝 [Co-Create](./co-create/)
-Collaborative platform for project development
-- **Purpose**: Team collaboration and project management
-- **Features**: Real-time collaboration tools
-
-### 🔒 [CryptPad](./cryptpad/)
-End-to-end encrypted collaboration suite
-- **Purpose**: Secure document editing and collaboration
-- **Features**: Real-time editing, encrypted storage
-- **URL**: `pad.mos-erver.dev`
-- **Deployment**: Docker Compose
-
-## 📁 **Project Structure**
-
+### File Structure
 ```
-mos-erver/
-├── website/                 # Main website application
-│   ├── css/                # Stylesheets
-│   ├── js/                 # JavaScript modules
-│   ├── data/               # Decision tree data
-│   └── *.html              # Page templates
-├── pihole-wireguard/       # Network security stack
-├── co-create/              # Collaboration platform
-├── cryptpad/               # CryptPad collaboration suite
-├── .gitignore              # Git ignore rules
-├── README.md               # This file
-└── UPDATES.md              # Software update guide
+osiom.space/
+├── index.html
+├── decision-tree.html
+├── discovery.html
+├── menu.html
+├── css/
+│   └── styles.css
+├── js/
+│   ├── index.js
+│   ├── menu-loader.js
+│   ├── categories.js
+│   └── ...
+├── data/
+│   └── data-storage.js
+├── img/
+└── README.md
 ```
 
-## 🔧 **Development**
+## 🎨 Customization
+- Click color pickers to set glitch colors (saved in localStorage)
+- Use the slider to adjust pixel size (1-20px)
+- Click the dice button to randomize colors
 
-### Prerequisites
-- SSH access to your server
-- Basic knowledge of Docker and Docker Compose
-- Understanding of the deployed services
+## 📱 Responsive Design
+- Desktop: 380×520px container
+- Tablet: 300×410px
+- Mobile: 250×340px
+- Small mobile: 220×300px
 
-### Contributing
-1. Make changes locally
-2. Test thoroughly
-3. Deploy using provided scripts
-4. Monitor service logs for issues
+## 📡 Deployment
 
-## 📊 **Service Status**
+### Deploy to Server via SSH
+Add a script named `deploy.sh` in this folder:
 
-- ✅ **Website**: Active and responsive
-- ✅ **Pi-hole**: Network-wide ad blocking
-- ✅ **WireGuard**: Secure VPN access
-- ✅ **Co-Create**: Collaboration platform
-- ✅ **CryptPad**: Encrypted collaboration suite
+```bash
+#!/bin/bash
+REMOTE_USER="mos"
+REMOTE_HOST="192.168.0.100"
+REMOTE_PATH="$PWD"
 
-## 🛠️ **Maintenance**
+rsync -avz --delete ./ "$REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH/"
+```
 
-### Regular Tasks
-- Monitor service logs
-- Update dependencies
-- Backup configurations
-- Security updates
+Make it executable:
+```bash
+chmod +x deploy.sh
+```
 
-### Software Updates
-See [UPDATES.md](./UPDATES.md) for detailed instructions on updating:
-- CryptPad
-- Cloudflare Tunnel (cloudflared)
-- Co-Create
-- Pi-hole + WireGuard
-- Website
+Run it:
+```bash
+./deploy.sh
+```
 
-### Troubleshooting
-- Check service status first
-- Review logs for errors
-- Verify file permissions
-- Test network connectivity
+- This will copy the whole folder to the same path on your remote server via SSH.
+- Requires `rsync` and SSH access.
 
-## 📝 **Documentation**
-
-Each service has its own detailed README:
-- [Website Documentation](./website/README.md)
-- [Pi-hole + WireGuard Setup](./pihole-wireguard/README.md)
-- [Co-Create Guide](./co-create/README.md)
-- [Software Update Guide](./UPDATES.md)
-
----
-
-**Last Updated**: October 2025  
-**Maintainer**: MOS  
-**Server**: mos-erver.dev
+## 📄 License
+MIT License
