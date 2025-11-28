@@ -49,29 +49,13 @@ osiom.space/
 ## 📡 Deployment
 
 ### Deploy to Server via SSH
-Add a script named `deploy.sh` in this folder:
+Deploy via CLI:
 
 ```bash
 #!/bin/bash
-REMOTE_USER="mos"
-REMOTE_HOST="192.168.0.100"
-REMOTE_PATH="$PWD"
-
-rsync -avz --delete ./ "$REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH/"
+scp -r /Users/matteoosio/Documents/osiom.space/* mos@192.168.0.100:/home/mos/osiom-space
 ```
-
-Make it executable:
-```bash
-chmod +x deploy.sh
-```
-
-Run it:
-```bash
-./deploy.sh
-```
-
-- This will copy the whole folder to the same path on your remote server via SSH.
-- Requires `rsync` and SSH access.
+This will copy the whole folder to the same path on your remote server via SSH.
 
 ## 📄 License
 MIT License
