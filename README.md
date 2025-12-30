@@ -7,6 +7,7 @@
 - 4-color customizable palette (color pickers)
 - Adjustable pixelation (slider)
 - Color randomization button
+- Custom favicon with 3D axes design (representing "osiom" - to the axes in Polish)
 - Responsive design for desktop, tablet, and mobile
 - Dynamic dropdown menus for Events and Web
 - Social links (Mastodon, GitHub, Codeberg, Substack)
@@ -85,12 +86,12 @@ ingress:
 Deploy via CLI:
 
 ```bash
-scp -r /Users/matteoosio/Documents/osiom.space/* mos@192.168.0.100:/var/www/osiom.space
+scp -r /Users/matteoosio/Documents/osiom.space/* mos@192.168.1.78:/var/www/osiom.space
 ```
 
 Or use `rsync` for efficient sync:
 ```bash
-rsync -avz --delete /Users/matteoosio/Documents/osiom.space/ mos@192.168.0.100:/var/www/osiom.space/
+rsync -avz --delete /Users/matteoosio/Documents/osiom.space/ mos@192.168.1.78:/var/www/osiom.space/
 ```
 
 - This will copy the whole folder to the correct path on your remote server via SSH.
