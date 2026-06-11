@@ -8,7 +8,8 @@
         defaultColors: ['#00CED1', '#4B0082', '#FFD700', '#6A5ACD'],
         dropdowns: [
             { id: 'menuEvents', dataId: 'eventsDropdown', dataFile: 'events.json', colorIndex: 0, itemClass: 'event-item', titleClass: 'event-date', noItemsText: 'No upcoming events' },
-            { id: 'menuWeb', dataId: 'webDropdown', dataFile: 'web.json', colorIndex: 1, itemClass: 'web-item', titleClass: 'web-title', noItemsText: 'No items' }
+            { id: 'menuWeb', dataId: 'webDropdown', dataFile: 'web.json', colorIndex: 1, itemClass: 'web-item', titleClass: 'web-title', noItemsText: 'No items' },
+            { id: 'menuTools', dataId: 'toolsDropdown', dataFile: 'tools.json', colorIndex: 2, itemClass: 'web-item', titleClass: 'web-title', noItemsText: 'No tools' }
         ],
         colorInputIds: ['color1', 'color2', 'color3', 'color4']
     };
