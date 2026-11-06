@@ -1,5 +1,7 @@
 # osiom.space — agent context
 
+_Shared rules (Pi + Hermes): `../AGENTS.md` (gh/). Read it if it isn't in your context._
+
 Interactive glitch-art site: pure HTML/CSS/JS, no dependencies, no build step. Hosted on
 a Raspberry Pi 5 — nginx `:8081` serves the static files, nginx `:8080` fronts it for a
 Cloudflare Tunnel (Cloudflare terminates TLS). Full runbook in `SETUP.md`.
@@ -18,7 +20,7 @@ Cloudflare Tunnel (Cloudflare terminates TLS). Full runbook in `SETUP.md`.
 - `events/` — event PDFs; `.htaccess` — Apache fallback rules.
 
 ## Workflows
-- Ship changes to the Pi → `deploy-site` skill, or `/deploy`.
+- Ship changes to the Pi → `deploy-site` skill (`.pi/skills/deploy-site/SKILL.md`), or `/deploy` (`.pi/prompts/deploy.md`).
 
 ## Conventions
 - Preview: open `index.html` in a browser, or `python3 -m http.server`.
