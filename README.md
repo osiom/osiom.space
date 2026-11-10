@@ -98,19 +98,19 @@ ingress:
 ## 📡 Deployment
 
 ### Deploy to Server via SSH
-Deploy via CLI:
+The Pi is reached over Tailscale as `raspberrypi`. Dry-run first (`-n`), check there are
+no unexpected `deleting` lines, then run again without `-n`:
 
 ```bash
-scp -r /Users/matteoosio/Documents/osiom.space/* mos@192.168.1.78:/var/www/osiom.space
+rsync -avzn --delete \
+  --exclude='.git/' --exclude='.pi/' --exclude='.gitignore' --exclude='.DS_Store' \
+  --exclude='AGENTS.md' --exclude='SETUP.md' \
+  ./ mos@raspberrypi:/var/www/osiom.space/
 ```
 
-Or use `rsync` for efficient sync:
-```bash
-rsync -avz --delete /Users/matteoosio/Documents/osiom.space/ mos@192.168.1.78:/var/www/osiom.space/
-```
-
-- This will copy the whole folder to the correct path on your remote server via SSH.
-- Requires `rsync` and SSH access.
+- The excludes keep the git history and server runbook off the public webroot.
+- Cloudflare caches CSS/JS for ~1h: when they change, bump the `?v=` on their links in
+  `index.html` so visitors don't get new HTML with stale CSS/JS.
 
 ## 🛠️ Verifying the Setup
 - Check nginx: `sudo systemctl status nginx`

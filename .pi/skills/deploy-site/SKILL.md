@@ -9,11 +9,18 @@ Read `SETUP.md` for the full architecture: nginx `:8081` static files, nginx `:8
 proxy for the Cloudflare Tunnel, TLS terminated at Cloudflare.
 
 ## Sync
+The Pi is on Tailscale as `raspberrypi`. Dry-run first, then drop `-n`:
 ```bash
-rsync -avz --delete ./ <user>@<pi-host>:/var/www/osiom.space/
+rsync -avzn --delete \
+  --exclude='.git/' --exclude='.pi/' --exclude='.gitignore' --exclude='.DS_Store' \
+  --exclude='AGENTS.md' --exclude='SETUP.md' \
+  ./ mos@raspberrypi:/var/www/osiom.space/
 ```
 `--delete` mirrors the folder — **confirm the target host and path with me first**, since
-a wrong path could remove files.
+a wrong path could remove files. The excludes keep `.git/` and the runbook off the webroot.
+
+If CSS/JS changed, bump the `?v=` on their links in `index.html` first: Cloudflare caches
+them for ~1h and would otherwise serve stale CSS/JS with the new HTML.
 
 ## Verify (on the Pi)
 ```bash

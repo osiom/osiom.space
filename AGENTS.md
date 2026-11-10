@@ -12,6 +12,8 @@ Cloudflare Tunnel (Cloudflare terminates TLS). Full runbook in `SETUP.md`.
   Edit data, not hardcoded HTML, when adding entries.
 - Deployment is by `rsync`/`scp` to `/var/www/osiom.space` on the Pi — **not** a git push.
 - nginx serves HTTP only internally; do **not** add HTTPS config (Cloudflare handles TLS).
+- Cloudflare caches `.css`/`.js` (~1h). When either changes, bump the `?v=` on its link in
+  `index.html`, or visitors get new HTML with stale CSS/JS.
 
 ## Where to look (read on demand)
 - `README.md` — features, file structure, hosting architecture, deploy/verify.
