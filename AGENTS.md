@@ -17,6 +17,7 @@ Cloudflare Tunnel (Cloudflare terminates TLS). Full runbook in `SETUP.md`.
 - `README.md` — features, file structure, hosting architecture, deploy/verify.
 - `SETUP.md` — the full server runbook (nginx, Cloudflare Tunnel, future services).
 - `index.html` + `js/index.js` — the experience; `css/styles.css`; `data/*.json` — content.
+- Background forecast + propagation knob + light/dark — README "Background Forecast"; tune via `BG_*` in `js/index.js`, theme tokens on `:root` in `css/styles.css`.
 - `events/` — event PDFs; `.htaccess` — Apache fallback rules.
 
 ## Workflows

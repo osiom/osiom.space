@@ -7,6 +7,9 @@
 - 4-color customizable palette (color pickers)
 - Adjustable pixelation (slider)
 - Color randomization button
+- Background forecast: the page background is predicted from the canvas, with confidence decaying to the prior at the screen edge
+- Hidden propagation knob (top left, or press `p`): zero (default) / replicate / reflect / circular padding, or diffusion inpainting
+- Light / dark toggle next to the knob: switches the prior the forecast falls back to
 - Custom favicon with 3D axes design (representing "osiom" - to the axes in Polish)
 - Responsive design for desktop, tablet, and mobile
 - Dynamic dropdown menus for Events and Web
@@ -19,22 +22,34 @@ Open `index.html` in your browser. No build or install required.
 ### File Structure
 ```
 osiom.space/
-├── index.html
-├── decision-tree.html
-├── discovery.html
-├── menu.html
+├── index.html          # page shell: canvas, menus, corner controls
 ├── css/
-│   └── styles.css
+│   └── styles.css      # styles + light/dark theme tokens
 ├── js/
-│   ├── index.js
-│   ├── menu-loader.js
-│   ├── categories.js
-│   └── ...
-├── data/
-│   └── data-storage.js
-├── img/
+│   └── index.js        # canvas animation, background forecast, menus
+├── data/               # menu content (edit these, not the HTML)
+│   ├── events.json
+│   ├── tools.json
+│   └── web.json
+├── events/             # event PDFs
+├── .htaccess           # Apache fallback rules
+├── SETUP.md            # server runbook
 └── README.md
 ```
+
+## 🔮 Background Forecast
+The canvas is the only "observed" data on the page; the background is a prediction
+made from it, the way a CNN pads past an image border or an inpainting model fills
+unknown pixels. It is drawn on a low-res grid (8px cells) behind everything.
+
+- **Confidence decays with distance:** blocks grow, noise rises, and the colour fades
+  back to the *prior* (the theme background), reaching it exactly at the screen edge.
+- **The forecast lags** slightly behind the canvas, so glitch bursts ripple outward.
+- **Modes** (hidden knob top-left, or `p`): `zero` (no prediction — the default),
+  `replicate`, `reflect`, `circular` (CNN padding modes) and `diffuse` (diffusion inpainting).
+- **Light / dark** (toggle next to the knob) swaps the prior between `#f5f5f5` and `#111`.
+- Mode and theme are remembered in `localStorage`.
+- Tuning lives in the `BG_*` constants at the top of `js/index.js`.
 
 ## 🖥️ Hosting Architecture
 - **Device:** Raspberry Pi 5 (16GB RAM)
