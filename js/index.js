@@ -560,6 +560,14 @@
         return m < n ? m : period - 1 - m;
     }
 
+    // Snap a canvas pixel index to the centre of its px-slider block, so the
+    // forecast is made from the pixelated image the visitor actually sees
+    function snapToPixel(i, n) {
+        const p = state.pixelSize;
+        if (p <= 1) return i;
+        return Math.min(n - 1, ((i / p) | 0) * p + (p >> 1));
+    }
+
     // Deterministic noise in [-1, 1] per block and time bucket
     function hashNoise(x, y, s) {
         let h = (Math.imul(x, 374761393) + Math.imul(y, 668265263) + Math.imul(s, 1442695041)) | 0;
@@ -584,8 +592,8 @@
             for (let col = 0; col < cols; col++, i++) {
                 const x = (col + 0.5) * cell;
                 if (inY && x >= rect.left && x < rect.right) {
-                    const u = Math.min(W - 1, ((x - rect.left) * sx) | 0);
-                    const v = Math.min(H - 1, ((y - rect.top) * sy) | 0);
+                    const u = snapToPixel(Math.min(W - 1, ((x - rect.left) * sx) | 0), W);
+                    const v = snapToPixel(Math.min(H - 1, ((y - rect.top) * sy) | 0), H);
                     const p = (v * W + u) << 2;
                     field[i * 3] = state.pixels[p];
                     field[i * 3 + 1] = state.pixels[p + 1];
@@ -627,6 +635,8 @@
         const W = CONSTANTS.CANVAS_WIDTH, H = CONSTANTS.CANVAS_HEIGHT;
         const sx = W / rect.width, sy = H / rect.height;
         const prior = CONSTANTS.BG_PRIORS[state.theme];
+        // The forecast is never sharper than the canvas it is made from
+        const baseBlock = Math.max(1, Math.round(state.pixelSize / (sx * cell)));
         const pixels = state.pixels;
         const out = bg.imageData.data;
         const smoothing = CONSTANTS.BG_SMOOTHING;
@@ -653,7 +663,7 @@
                 let r = prior.r, g = prior.g, b = prior.b;
                 if (mode !== 'zero' && t < 1) {
                     // Resolution of the forecast drops with distance
-                    const block = 1 + ((t * CONSTANTS.BG_MAX_BLOCK) | 0);
+                    const block = baseBlock + ((t * CONSTANTS.BG_MAX_BLOCK) | 0);
                     const bc = ((col / block) | 0) * block;
                     const br = ((row / block) | 0) * block;
 
@@ -662,8 +672,8 @@
                         const j = (((br / scale) | 0) * bg.dCols + ((bc / scale) | 0)) * 3;
                         r = field[j]; g = field[j + 1]; b = field[j + 2];
                     } else {
-                        const u = padIndex(mode, Math.floor(((bc + 0.5) * cell - rect.left) * sx), W);
-                        const v = padIndex(mode, Math.floor(((br + 0.5) * cell - rect.top) * sy), H);
+                        const u = snapToPixel(padIndex(mode, Math.floor(((bc + 0.5) * cell - rect.left) * sx), W), W);
+                        const v = snapToPixel(padIndex(mode, Math.floor(((br + 0.5) * cell - rect.top) * sy), H), H);
                         const p = (v * W + u) << 2;
                         r = pixels[p]; g = pixels[p + 1]; b = pixels[p + 2];
                     }

@@ -45,6 +45,8 @@ unknown pixels. It is drawn on a low-res grid (8px cells) behind everything.
 - **Confidence decays with distance:** blocks grow, noise rises, and the colour fades
   back to the *prior* (the theme background), reaching it exactly at the screen edge.
 - **The forecast lags** slightly behind the canvas, so glitch bursts ripple outward.
+- **It follows the `px` slider:** it is made from the pixelated canvas, and its blocks are
+  never smaller than the canvas pixels.
 - **Modes** (hidden knob top-left, or `p`): `zero` (no prediction — the default),
   `replicate`, `reflect`, `circular` (CNN padding modes) and `diffuse` (diffusion inpainting).
 - **Light / dark** (toggle next to the knob) swaps the prior between `#f5f5f5` and `#111`.
